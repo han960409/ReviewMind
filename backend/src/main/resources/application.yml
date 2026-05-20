@@ -18,4 +18,4 @@ fastapi:
   url: http://localhost:8000
 
 gemini:
-  api-key: "AIzaSyDsClGMRnXoSRRi9qJJ_XAIpdbtlNsIGQ4"
+  api-key: ${GEMINI_API_KEY}
