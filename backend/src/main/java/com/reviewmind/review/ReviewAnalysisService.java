@@ -2,7 +2,10 @@ package com.reviewmind.review;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,7 +16,7 @@ import java.util.Map;
 public class ReviewAnalysisService {
 
     private final ReviewAnalysisRepository repository;
-    private final OpenAiService openAiService;
+    private final GeminiService geminiService;
 
     @Value("${fastapi.url}")
     private String fastApiUrl;
@@ -22,8 +25,7 @@ public class ReviewAnalysisService {
 
         String originalText = request.getContent();
 
-        String translatedText =
-                openAiService.translateToEnglish(originalText);
+        String translatedText = geminiService.translateToEnglish(originalText);
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -51,13 +53,11 @@ public class ReviewAnalysisService {
             throw new RuntimeException("FastAPI 응답이 비어 있습니다.");
         }
 
-        String explanation =
-                openAiService.explainInKorean(
-                        originalText,
-                        translatedText,
-                        result.getLabel(),
-                        result.getScore()
-                );
+        String explanation = geminiService.explain(
+                originalText,
+                result.getLabel(),
+                result.getScore()
+        );
 
         ReviewAnalysis saved = repository.save(
                 new ReviewAnalysis(

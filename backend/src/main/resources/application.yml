@@ -17,6 +17,5 @@ spring:
 fastapi:
   url: http://localhost:8000
 
-openai:
-  api-key: ${OPENAI_API_KEY}
-  model: gpt-4.1-mini
+gemini:
+  api-key: "AIzaSyDsClGMRnXoSRRi9qJJ_XAIpdbtlNsIGQ4"
